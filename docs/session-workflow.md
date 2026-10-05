@@ -13,7 +13,7 @@ Before performing LFS build work:
 Normal startup commands:
 
 ```bash
-cd ~/Projects/erebOS
+cd ~/Projects/EREBUS
 ./scripts/start-erebus.sh
 export LFS=/mnt/lfs
 ```
@@ -37,7 +37,7 @@ Expected state:
 Run:
 
 ```bash
-cd ~/Projects/erebOS
+cd ~/Projects/EREBUS
 ./scripts/stop-erebus.sh
 ```
 
@@ -51,9 +51,9 @@ Expected final state:
 
 ## Migration note
 
-During the project rename, `start-erebus.sh` accepts the legacy local project path `~/Projects/erebOS` and legacy image filename `erebOS-lfs.img` as fallbacks.
+The local project directory and build image have now been migrated to `~/Projects/EREBUS` and `build/erebus-lfs.img`.
 
-The local project directory and build image have not yet been renamed. Their migration will be handled separately after dependent paths have been audited and tested.
+The renamed start and stop scripts were tested successfully against the new paths, including restoration of CLOTHO's normal Ubuntu host state after shutdown.
 
 ## Important
 

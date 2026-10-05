@@ -18,7 +18,7 @@ CLOTHO (Acer Nitro 5) contains:
 
 EREBUS was initially constructed inside a sparse 64 GB ext4 filesystem image:
 
-`~/Projects/erebOS/build/erebOS-lfs.img`
+`~/Projects/EREBUS/build/erebus-lfs.img`
 
 It is mounted at:
 

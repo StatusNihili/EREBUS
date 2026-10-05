@@ -2,21 +2,8 @@
 
 set -e
 
-# Prefer the new EREBUS project path, but tolerate the legacy path during migration.
-if [ -d "$HOME/Projects/EREBUS" ]; then
-    PROJECT="$HOME/Projects/EREBUS"
-elif [ -d "$HOME/Projects/erebOS" ]; then
-    PROJECT="$HOME/Projects/erebOS"
-else
-    PROJECT="$HOME/Projects/EREBUS"
-fi
-
-# Prefer the renamed image, but fall back to the legacy image name until it is renamed locally.
-if [ -f "$PROJECT/build/erebus-lfs.img" ]; then
-    IMAGE="$PROJECT/build/erebus-lfs.img"
-else
-    IMAGE="$PROJECT/build/erebOS-lfs.img"
-fi
+PROJECT="$HOME/Projects/EREBUS"
+IMAGE="$PROJECT/build/erebus-lfs.img"
 
 LFS="/mnt/lfs"
 
