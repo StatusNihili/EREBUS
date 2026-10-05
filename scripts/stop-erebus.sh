@@ -4,7 +4,7 @@ set -e
 
 LFS="/mnt/lfs"
 
-echo "=== Closing erebOS build session ==="
+echo "=== Closing EREBUS build session ==="
 
 if mountpoint -q "$LFS/dev/shm"; then
     sudo umount "$LFS/dev/shm"
@@ -35,5 +35,5 @@ if [ "$(readlink -f /bin/sh)" != "/usr/bin/dash" ]; then
 fi
 
 echo
-echo "erebOS session closed."
+echo "EREBUS session closed."
 echo "/bin/sh -> $(readlink -f /bin/sh)"

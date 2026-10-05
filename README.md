@@ -1,198 +1,120 @@
-# erebOS
+# EREBUS
 
-**erebOS** is a Linux From Scratch (LFS)/Beyond Linux From Scratch (BLFS) project to build a lightweight, purpose-built Linux system for use as a headless home-lab server.
+**EREBUS** is a Linux From Scratch (LFS) / Beyond Linux From Scratch (BLFS) project to build a lightweight, purpose-built Linux system for a home-lab server.
 
-The project is being developed as both a practical system and a learning exercise – building a usable Linux environment from source while understanding and documenting the decisions, problems, fixes, and concepts encountered along the way.
+The system is designed for a repurposed MacBook Air and is being built as both a practical server platform and a deep technical learning project: build the system from source, understand the boot chain and userspace, document the decisions, and keep the finished machine small enough to remain comprehensible.
 
-Rather than producing a general-purpose desktop distribution, erebOS is intended for a specific role and specific hardware. The finished system will run on a repurposed MacBook Air and provide a minimal Linux foundation for self-hosted services, networking experiments, automation, monitoring, and other home-lab workloads.
+> **Status:** The base LFS 13.1-systemd system is complete, has booted successfully on the target MacBookAir6,2, and has working wired networking plus OpenSSH remote administration. Post-LFS / BLFS work is now under way.
 
-**Status:** Work in progress. The base LFS system is currently under construction.
+> **Naming migration:** this project was originally named `erebOS`. The repository and project identity are now **EREBUS**. Historical build notes may still contain the former name until the installed system and archived artefacts are migrated.
 
-## Goals
+## Role
 
-The main goals of erebOS are to:
+EREBUS is intended to become the server foundation of **TENEBRAE**, the wider home-lab environment.
 
-- Build a complete Linux system from source using Linux From Scratch.
-- Extend the base system with selected BLFS components required for a practical and adaptable headless server.
-- Keep the final system relatively small and understandable.
-- Avoid installing software simply because it is part of a conventional distribution.
-- Configure the kernel and userspace around the target hardware and role.
-- Develop a repeatable workflow for entering, leaving, maintaining, and rebuilding the LFS environment.
-- Document the entire process as both a technical reference and a record of what was learned.
-- Ultimately deploy the finished system on physical MacBook Air hardware as part of a home lab.
+The target priorities are:
 
-erebOS is not intended to become a general-purpose Linux distribution or compete with established projects such as Debian, Ubuntu, Arch, or Gentoo.
+- lightweight, understandable Linux base
+- headless-first operation with a basic local graphical environment available when useful
+- reliable remote administration
+- deliberate package selection rather than a conventional full distribution
+- documented build, maintenance and recovery procedures
+- hardware-specific configuration for the target MacBook Air
+- practical self-hosted services, monitoring, automation and networking experiments
 
-The point of the project is to understand and control the system beneath the services that will eventually run on it.
+## Target hardware
 
-## Target System
+**Target:** MacBook Air (`ATROPOS`)  
+**Build host:** Acer Nitro (`CLOTHO`)
 
-erebOS is being built initially on a separate Linux workstation before being transferred to its intended hardware.
+The base system was built on the Nitro and deployed to the MacBook Air after the bootable LFS image was completed.
 
-### Build host
+## Current technical state
 
-The LFS environment is currently being constructed on an Ubuntu-based build machine.
+The completed LFS base currently includes:
 
-Project scripts are provided to help prepare the host for an erebOS build session and restore the host to its normal configuration afterwards.
+- Linux 7.1.8
+- GRUB 2.14, x86_64 EFI
+- systemd
+- ext4 root filesystem
+- successful native boot on MacBookAir6,2
+- ASIX AX88179 wired Ethernet support
+- OpenSSH with key-based administration
+- documented recovery snapshots
 
-### Target hardware
+Broadcom BCM4360 Wi-Fi and further server functionality belong to the BLFS / post-LFS phase.
 
-The finished system is intended to run on a repurposed MacBook Air as a headless home-lab server.
+## Build workflow
 
-The final hardware configuration and hardware-specific kernel requirements will be documented as deployment work progresses.
+At a high level:
 
-## Design Direction
+1. Prepare and validate the build host.
+2. Prepare the target filesystem and sources.
+3. Build the cross-toolchain and temporary tools.
+4. Enter chroot and build the final LFS base system.
+5. Configure userspace, systemd, the kernel and bootloader.
+6. Deploy to the target MacBook Air.
+7. Validate native boot, networking and remote administration.
+8. Add selected BLFS components and home-lab services.
 
-The finished erebOS system is expected to prioritize:
+The detailed chronological record lives under [`docs/`](docs/).
 
-**Minimalism**  
-Only software required for the system's intended role should be installed.
-
-**Understandability**  
-Important parts of the operating system should remain understandable and traceable.
-
-**Headless operation**  
-The target system does not require a ‘conventional’ desktop environment.
-
-**Remote administration**  
-Routine management will be performed over the network.
-
-**Reproducibility**  
-Build procedures, configuration decisions, package versions, and system changes should be documented sufficiently to reconstruct or repair the system.
-
-**Practicality over purity**  
-erebOS is a learning and home-lab project, not an exercise in avoiding useful tools for ideological reasons. Components will be selected according to what makes technical sense for the finished system.
-
-## Project Structure
+## Repository structure
 
 ```text
-erebOS/
+EREBUS/
+├── configs/
+│   └── kernel/
 ├── docs/
-│   ├── phase-00-build-host.md
 │   ├── chapter-06-temporary-tools.md
 │   ├── chapter-07-chroot.md
 │   ├── chapter-08-basic-system.md
-│   ├── session-workflow.md
-│   └── source-verification.md
-│
+│   ├── chapter-09-system-configuration.md
+│   ├── chapter-10-bootable-system.md
+│   ├── chapter-11-finalization.md
+│   ├── remote-administration.md
+│   └── session-workflow.md
 ├── host-checks/
-│   └── ...
-│
 ├── package-lists/
-│   └── lfs-13.1/
-│
 ├── scripts/
-│   ├── start-erebos.sh
-│   └── stop-erebos.sh
-│
+│   ├── start-erebus.sh
+│   └── stop-erebus.sh
 └── README.md
 ```
 
-### `docs/`
+## Build-session helpers
 
-Detailed build notes, procedures, explanations, and project documentation.
+The helper scripts manage the hosted LFS session, including the `/bin/sh` switch required for LFS work, the `/mnt/lfs` mount, virtual filesystems and restoration of the Ubuntu host when the session ends.
 
-The README provides the overview; the documentation directory contains the actual build record.
+Start a session:
 
-### `host-checks/`
+```bash
+./scripts/start-erebus.sh
+```
 
-Captured host-system validation results used to verify that the build environment meets LFS requirements.
+End a session:
 
-### `package-lists/`
+```bash
+./scripts/stop-erebus.sh
+```
 
-Package information associated with the LFS version used by the project.
+During the naming migration, the start script can also recognise the legacy `~/Projects/erebOS` project directory and `erebOS-lfs.img` image so the rename can be completed without breaking the build workflow.
 
-### `scripts/`
+## Documentation philosophy
 
-Small utilities used to prepare and restore the build environment.
+The repository preserves the process rather than presenting only a polished end state. Build failures, wrong assumptions, troubleshooting, recovery procedures and abandoned experiments are documented where they are useful.
 
-These currently include session start/stop tooling for tasks such as mounting the erebOS filesystem, setting the LFS environment variable, and ensuring the host shell configuration is appropriate for LFS work.
-
-## Build Workflow
-
-The erebOS build follows the general structure of Linux From Scratch rather than replacing it with a fully automated installer.
-
-At high level, the process consists of:
-
-1. Preparing and validating the build host.
-2. Preparing the target filesystem.
-3. Downloading and verifying source packages.
-4. Building the initial cross-toolchain.
-5. Building temporary tools.
-6. Entering the new system through chroot.
-7. Building the final base system.
-8. Configuring the system and Linux kernel.
-9. Making the system independently bootable.
-10. Adding selected BLFS packages.
-11. Configuring networking and remote administration.
-12. Deploying the completed system to the target MacBook Air.
-13. Adding and documenting home-lab services.
-
-Detailed commands and build notes are kept under [`docs/`](docs/).
-
-## Documentation Philosophy
-
-One of the goals of erebOS is to preserve the process rather than only presenting the finished result.
-
-That means the documentation may include:
-
-- failed builds
-- incorrect assumptions
-- troubleshooting steps
-- configuration changes
-- recovery procedures
-- experiments that were later abandoned
-- explanations of unfamiliar Linux concepts
-- reasons behind design decisions
-
-Over time, the project documentation is intended to become a maintenance and troubleshooting manual for the finished system.
-
-## Current Progress
-
-The project currently includes documentation and tooling covering the early LFS build environment and construction stages.
-
-Current work includes:
-
-- build-host preparation
-- host requirement checks
-- source verification
-- temporary tool construction
-- chroot preparation
-- base-system construction
-- repeatable erebOS session start/stop procedures
-
-The repository will continue to evolve as the base LFS installation is completed and the project moves into BLFS, hardware configuration, networking, and home-lab deployment.
-
-## Planned Work
-
-Future stages are expected to include:
-
-- completion of the base LFS system
-- Linux kernel configuration for the target hardware
-- bootloader configuration
-- networking
-- SSH-based remote administration
-- selected BLFS server components
-- system logging and monitoring
-- storage configuration
-- security hardening
-- backup and recovery procedures
-- deployment to the target MacBook Air
-- home-lab service configuration
-- architecture and boot-process diagrams
-- final system documentation
-
-The exact software stack will be decided as the system develops rather than being fixed in advance.
+The goal is for the documentation to become both a learning record and a maintenance manual for the finished system.
 
 ## References
 
-erebOS is built using the Linux From Scratch and Beyond Linux From Scratch projects as its primary technical references.
+EREBUS is built primarily from:
 
-- Linux From Scratch
+- Linux From Scratch 13.1-systemd
 - Beyond Linux From Scratch
 
-The repository documents the erebOS implementation and project-specific decisions rather than replacing the official LFS/BLFS documentation.
+The repository records the EREBUS implementation and project-specific decisions; it does not replace the upstream LFS/BLFS documentation.
 
-## Project Scope
+---
 
-erebOS is a personal technical and educational project, intended as a tool for learning Linux and its systems at a deeper level than previous Linux personal experiences.
+**STATUS NIHILI** · Software · Systems · Hardware · Experiments

@@ -2,11 +2,25 @@
 
 set -e
 
-PROJECT="$HOME/Projects/erebOS"
-IMAGE="$PROJECT/build/erebOS-lfs.img"
+# Prefer the new EREBUS project path, but tolerate the legacy path during migration.
+if [ -d "$HOME/Projects/EREBUS" ]; then
+    PROJECT="$HOME/Projects/EREBUS"
+elif [ -d "$HOME/Projects/erebOS" ]; then
+    PROJECT="$HOME/Projects/erebOS"
+else
+    PROJECT="$HOME/Projects/EREBUS"
+fi
+
+# Prefer the renamed image, but fall back to the legacy image name until it is renamed locally.
+if [ -f "$PROJECT/build/erebus-lfs.img" ]; then
+    IMAGE="$PROJECT/build/erebus-lfs.img"
+else
+    IMAGE="$PROJECT/build/erebOS-lfs.img"
+fi
+
 LFS="/mnt/lfs"
 
-echo "=== Starting erebOS build session ==="
+echo "=== Starting EREBUS build session ==="
 
 if [ "$(readlink -f /bin/sh)" != "/usr/bin/bash" ]; then
     echo "Switching host /bin/sh to Bash..."
@@ -21,7 +35,7 @@ fi
 sudo mkdir -p "$LFS"
 
 if ! mountpoint -q "$LFS"; then
-    echo "Mounting erebOS filesystem..."
+    echo "Mounting EREBUS filesystem..."
     sudo mount -o loop -t ext4 "$IMAGE" "$LFS"
 fi
 
@@ -55,17 +69,17 @@ elif ! mountpoint -q "$LFS/dev/shm"; then
 fi
 
 echo
-echo "erebOS environment ready."
+echo "EREBUS environment ready."
 echo "/bin/sh -> $(readlink -f /bin/sh)"
 echo
 findmnt | grep "$LFS"
 
 echo
-echo "To enter erebOS:"
+echo "To enter EREBUS:"
 echo
 echo "sudo chroot /mnt/lfs /usr/bin/env -i \\"
 echo "    HOME=/root TERM=\"\$TERM\" \\"
-echo "    PS1='(erebOS chroot) \\u:\\w\\\$ ' \\"
+echo "    PS1='(EREBUS chroot) \\u:\\w\\\$ ' \\"
 echo "    PATH=/usr/bin:/usr/sbin \\"
 echo "    MAKEFLAGS='-j4' TESTSUITEFLAGS='-j4' \\"
 echo "    /bin/bash --login"
