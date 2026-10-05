@@ -1,3 +1,3 @@
-# erebOS Diagrams
+# EREBUS Diagrams
 
-Architecture and systems-design diagrams for erebOS
+Architecture and systems-design diagrams for EREBUS

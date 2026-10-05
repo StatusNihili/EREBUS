@@ -8,6 +8,6 @@ Base release: Linux From Scratch 13.1-systemd
 - MD5 verification failures: 0
 - Result: PASS
 
-The source archives used for the initial erebOS build were downloaded
+The source archives used for the initial EREBUS build were downloaded
 from the URLs pinned in package-lists/lfs-13.1/wget-list-systemd and
 verified against the accompanying LFS 13.1 md5sums manifest.

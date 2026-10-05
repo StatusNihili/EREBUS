@@ -4,7 +4,7 @@
 
 Chapter 7 completed successfully.
 
-erebOS entered its own chroot environment and ceased relying on the
+EREBUS entered its own chroot environment and ceased relying on the
 Ubuntu host userspace for subsequent build work.
 
 ## Temporary packages built inside chroot
@@ -20,7 +20,7 @@ Ubuntu host userspace for subsequent build work.
 
 ## System identity
 
-The initial erebOS passwd and group databases were created.
+The initial EREBUS passwd and group databases were created.
 
 The root account and temporary tester account were established.
 
@@ -53,6 +53,6 @@ Snapshot storage:
 - apparent size: 64 GB
 - actual disk usage: 13 GB
 
-This snapshot represents the last known-good temporary erebOS system
+This snapshot represents the last known-good temporary EREBUS system
 before Chapter 8 begins replacing temporary packages with the final
 permanent system.

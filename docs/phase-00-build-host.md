@@ -2,7 +2,8 @@
 
 ## Build host
 
-- Host: Acer Nitro 5 AN515-52
+- Host identity: CLOTHO
+- Hardware: Acer Nitro 5 AN515-52
 - Distribution: Ubuntu 24.04.5 LTS
 - Architecture: x86_64
 - CPU: Intel Core i5-8300H
@@ -13,7 +14,7 @@
 
 ## LFS host preparation
 
-The build host was checked before beginning the erebOS build.
+CLOTHO was checked before beginning the EREBUS build.
 
 Required additions installed:
 
@@ -24,8 +25,8 @@ Required additions installed:
 
 Host compatibility requirements:
 
-- `/bin/sh` points to Bash during active erebOS/LFS build sessions.
-- Ubuntu's normal Dash `/bin/sh` configuration is restored when leaving the erebOS project.
+- `/bin/sh` points to Bash during active EREBUS/LFS build sessions.
+- Ubuntu's normal Dash `/bin/sh` configuration is restored when leaving the EREBUS project.
 - `awk` resolves to GNU Awk.
 - `yacc` resolves to Bison.
 
@@ -35,4 +36,4 @@ C++ compiler sanity test completed successfully.
 
 Phase 00 complete.
 
-The Nitro is ready to act as the erebOS build workstation.
+CLOTHO is ready to act as the EREBUS build workstation.

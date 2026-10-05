@@ -39,7 +39,7 @@ Final checkpoint:
 
 ## Build settings
 
-Build parallelism is deliberately limited on the Acer Nitro:
+Build parallelism is deliberately limited on CLOTHO (Acer Nitro 5 AN515-52):
 
 - MAKEFLAGS=-j4
 - TESTSUITEFLAGS=-j4
@@ -89,12 +89,12 @@ Chapter 8 — Installing Basic System Software — completed successfully on 202
 
 All Chapter 8 packages were built, tested where applicable, installed, and verified.
 
-### erebOS-specific decisions
+### EREBUS-specific decisions
 
-- Build parallelism remained limited to `MAKEFLAGS=-j4` to control sustained thermal load on the Acer Nitro build host.
-- Libffi 3.8.0 was built with `--with-gcc-arch=haswell`, targeting the MacBookAir6,2 rather than the Nitro host CPU.
-- GRUB 2.14 was built for `x86_64-efi` only, matching the MacBook Air target. No bootloader was installed to a physical disk during Chapter 8.
-- The optional Chapter 8 stripping stage was deliberately skipped. Debugging symbols are being retained while erebOS remains under active development and hardware bring-up.
+- Build parallelism remained limited to `MAKEFLAGS=-j4` to control sustained thermal load on CLOTHO.
+- Libffi 3.8.0 was built with `--with-gcc-arch=haswell`, targeting ATROPOS (MacBookAir6,2) rather than the CLOTHO host CPU.
+- GRUB 2.14 was built for `x86_64-efi` only, matching the ATROPOS target. No bootloader was installed to a physical disk during Chapter 8.
+- The optional Chapter 8 stripping stage was deliberately skipped. Debugging symbols are being retained while EREBUS remains under active development and hardware bring-up.
 
 ### Notable expected test results
 
@@ -143,21 +143,21 @@ Snapshot storage:
 - logical size: 64 GB
 - actual disk usage: approximately 22 GB
 
-This snapshot represents the known-good erebOS system after completion of LFS Chapter 8 and before beginning Chapter 9.
+This snapshot represents the known-good EREBUS system after completion of LFS Chapter 8 and before beginning Chapter 9.
 
 ## Post-build target-hardware validation: GMP portability repair
 
-During later validation on the MacBookAir6,2 target, GCC 16.2.0 failed while compiling OpenSSH 10.5p1 with:
+During later validation on ATROPOS (MacBookAir6,2), GCC 16.2.0 failed while compiling OpenSSH 10.5p1 with:
 
     cc1: internal compiler error: Illegal instruction
 
-The failure reproduced with a minimal floating-point compilation test on the MacBook Air, while the same compiler worked on the Acer Nitro build host.
+The failure reproduced with a minimal floating-point compilation test on ATROPOS, while the same compiler worked on CLOTHO.
 
 Investigation showed that the installed GMP 6.3.0 header contained host-specific compiler tuning:
 
     __GMP_CFLAGS = "-mtune=skylake -march=broadwell"
 
-This made the Chapter 8 GMP build unsuitable for the older Haswell-class MacBook Air target.
+This made the Chapter 8 GMP build unsuitable for the older Haswell-class ATROPOS target.
 
 ### Repair
 
@@ -179,11 +179,11 @@ Because MPFR and MPC depend on GMP, both were rebuilt against the repaired libra
 - MPFR 4.2.2: 198/198 tests passed
 - MPC 1.4.1: 75/75 tests passed
 
-The repaired GMP, MPFR and MPC libraries, headers and pkg-config metadata were transferred to the MacBook Air and the dynamic linker cache refreshed.
+The repaired GMP, MPFR and MPC libraries, headers and pkg-config metadata were transferred to ATROPOS and the dynamic linker cache refreshed.
 
 ### Target verification
 
-On the MacBook Air:
+On ATROPOS:
 
 - GCC successfully compiled and executed the minimal floating-point test that had previously caused the illegal-instruction failure.
 - GCC's `cc1` was verified to load GMP, MPFR and MPC from `/usr/lib`.
@@ -193,4 +193,4 @@ On the MacBook Air:
 
 Conclusion:
 
-The failure was caused by CPU-specific optimisation leaking from the build host into GMP. Packages that form part of the compiler runtime dependency chain must remain portable across the Nitro build host and the MacBook Air production target unless target-specific optimisation is explicitly intentional and verified.
+The failure was caused by CPU-specific optimisation leaking from the build host into GMP. Packages that form part of the compiler runtime dependency chain must remain portable across the CLOTHO build host and the ATROPOS production target unless target-specific optimisation is explicitly intentional and verified.

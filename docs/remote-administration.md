@@ -1,14 +1,14 @@
-# erebOS Remote Administration
+# EREBUS Remote Administration
 
 ## Purpose
 
-erebOS is intended to operate primarily as a headless home-lab server.
+EREBUS is intended to operate primarily as a headless TENEBRAE home-lab server.
 
-Remote administration is provided through OpenSSH, with the MacBook Air's local console retained as a recovery path.
+Remote administration is provided through OpenSSH, with ATROPOS's local console retained as a recovery path.
 
 ## OpenSSH installation
 
-OpenSSH 10.5p1 was built and installed on the MacBookAir6,2 target after repairing the GMP/MPFR/MPC portability problem documented in `chapter-08-basic-system.md`.
+OpenSSH 10.5p1 was built and installed on ATROPOS (MacBookAir6,2) after repairing the GMP/MPFR/MPC portability problem documented in `chapter-08-basic-system.md`.
 
 Verification completed successfully:
 
@@ -47,13 +47,13 @@ Direct SSH login as root is disabled.
 
 ## Authentication
 
-An existing Ed25519 key on the Acer Nitro build/admin workstation is used for erebOS access:
+An existing Ed25519 key on CLOTHO, the Acer Nitro build/admin workstation, is used for EREBUS access:
 
     ~/.ssh/air_ed25519
 
-The public key was installed into the `andy` account on erebOS.
+The public key was installed into the `andy` account on ATROPOS.
 
-Key-based login was verified successfully from the Nitro.
+Key-based login was verified successfully from CLOTHO.
 
 ## SSH hardening
 
@@ -76,11 +76,11 @@ Root SSH login is disabled entirely.
 
 ## Network validation
 
-During initial setup the MacBook Air used:
+During initial setup ATROPOS used:
 
     192.168.1.231
 
-The Acer Nitro reached the target successfully over TCP port 22.
+CLOTHO reached ATROPOS successfully over TCP port 22.
 
 The SSH protocol handshake advertised:
 
@@ -88,7 +88,7 @@ The SSH protocol handshake advertised:
 
 RSA, ECDSA and Ed25519 host keys were generated during installation.
 
-The Ed25519 host key was accepted and stored by the Nitro on first connection.
+The Ed25519 host key was accepted and stored by CLOTHO on first connection.
 
 IP addresses documented here are DHCP-era setup addresses and should not be treated as permanent addressing policy.
 
@@ -98,18 +98,18 @@ A complete reboot test was performed after OpenSSH installation and hardening.
 
 After reboot:
 
-- erebOS returned successfully to the local login prompt.
+- EREBUS returned successfully to the local login prompt.
 - networking returned automatically.
 - `sshd.service` started automatically.
 - `systemctl is-active sshd` reported `active`.
-- key-authenticated login from the Nitro succeeded without local intervention.
+- key-authenticated login from CLOTHO succeeded without local intervention.
 - the hardened SSH policy remained in effect.
 
-This established working remote administration independent of the MacBook Air keyboard and display.
+This established working remote administration independent of the ATROPOS keyboard and display.
 
 ## Recovery considerations
 
-Until networking, boot configuration and recovery procedures are fully mature, the MacBook Air local console should remain available as an emergency administration path.
+Until networking, boot configuration and recovery procedures are fully mature, the ATROPOS local console should remain available as an emergency administration path.
 
 SSH configuration changes should be validated with:
 

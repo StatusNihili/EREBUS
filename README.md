@@ -1,120 +1,297 @@
 # EREBUS
 
-**EREBUS** is a Linux From Scratch (LFS) / Beyond Linux From Scratch (BLFS) project to build a lightweight, purpose-built Linux system for a home-lab server.
+**EREBUS** is a Linux From Scratch (LFS) / Beyond Linux From Scratch (BLFS)
+project to build a lightweight, purpose-built Linux operating system for a
+headless home-lab server.
 
-The system is designed for a repurposed MacBook Air and is being built as both a practical server platform and a deep technical learning project: build the system from source, understand the boot chain and userspace, document the decisions, and keep the finished machine small enough to remain comprehensible.
+EREBUS runs on **ATROPOS**, a 2014 13-inch MacBook Air, and is built and
+administered primarily from **CLOTHO**, an Acer Nitro 5 workstation.
 
-> **Status:** The base LFS 13.1-systemd system is complete, has booted successfully on the target MacBookAir6,2, and has working wired networking plus OpenSSH remote administration. Post-LFS / BLFS work is now under way.
+EREBUS forms part of **TENEBRAE**, the wider home-lab environment.
 
-> **Naming migration:** this project was originally named `erebOS`. The repository and project identity are now **EREBUS**. Historical build notes may still contain the former name until the installed system and archived artefacts are migrated.
+> The project was originally named `erebOS`. A controlled rename to EREBUS is
+> in progress. Some repository paths, image names and installed-system
+> metadata may temporarily retain the former name until each dependency has
+> been migrated and tested.
 
-## Role
+## Current status
 
-EREBUS is intended to become the server foundation of **TENEBRAE**, the wider home-lab environment.
+The Linux From Scratch 13.1-systemd base system is complete.
 
-The target priorities are:
+EREBUS has been deployed to ATROPOS and successfully boots natively from the
+internal SSD.
 
-- lightweight, understandable Linux base
-- headless-first operation with a basic local graphical environment available when useful
-- reliable remote administration
-- deliberate package selection rather than a conventional full distribution
-- documented build, maintenance and recovery procedures
-- hardware-specific configuration for the target MacBook Air
-- practical self-hosted services, monitoring, automation and networking experiments
+Validated functionality includes:
 
-## Target hardware
+- Linux 7.1.8 booting successfully on MacBookAir6,2
+- GRUB 2.14 x86_64 EFI booting through the fallback EFI path
+- ext4 root filesystem on the internal SSD
+- wired networking through an ASIX AX88179 USB Gigabit Ethernet adapter
+- systemd-networkd DHCP networking
+- OpenSSH 10.5p1 remote administration
+- Ed25519 key-based SSH authentication
+- password SSH authentication disabled
+- keyboard-interactive SSH authentication disabled
+- direct root SSH login disabled
+- SSH and networking successfully surviving a full reboot
+- remote administration from CLOTHO
+- documented recovery snapshots and troubleshooting history
 
-**Target:** MacBook Air (`ATROPOS`)  
-**Build host:** Acer Nitro (`CLOTHO`)
+The project is now moving from the core LFS construction phase into
+**BLFS/post-LFS server enablement**.
 
-The base system was built on the Nitro and deployed to the MacBook Air after the bootable LFS image was completed.
+## Purpose
 
-## Current technical state
+EREBUS exists to create a Linux system that is:
 
-The completed LFS base currently includes:
+- built from source and understood rather than treated as a black box
+- intentionally small and maintainable
+- designed around its actual hardware and server role
+- practical rather than minimal for minimalism's sake
+- reproducible where sensible
+- well documented
+- remotely manageable
+- recoverable when something goes wrong
 
-- Linux 7.1.8
-- GRUB 2.14, x86_64 EFI
+It is not intended to become a general-purpose Linux distribution or compete
+with established projects such as Debian, Ubuntu, Arch or Gentoo.
+
+## Systems
+
+### CLOTHO
+
+Primary build and administration workstation.
+
+Hardware:
+
+- Acer Nitro 5 AN515-52
+- Intel Core i5-8300H
+- 16 GB RAM
+- Ubuntu build host
+
+Roles:
+
+- LFS/BLFS build workstation
+- source preparation
+- project documentation
+- Git/GitHub management
+- remote administration of ATROPOS
+- recovery workstation
+
+### ATROPOS
+
+EREBUS production target.
+
+Hardware:
+
+- 2014 13-inch MacBook Air
+- MacBookAir6,2
+- Intel x86-64 / Haswell platform
+- 4 GB RAM
+- internal PCIe SSD
+- Broadcom BCM4360 Wi-Fi
+- USB Gigabit Ethernet available
+
+Primary role:
+
+- headless TENEBRAE home-lab server
+
+Wired Ethernet and SSH are the preferred administration and recovery path.
+
+### LACHESIS
+
+The Dell system is known as **LACHESIS**.
+
+It is part of the wider TENEBRAE environment but is not an EREBUS build or
+deployment target.
+
+## Design principles
+
+### Server first
+
+EREBUS is primarily a headless server operating system.
+
+A lightweight graphical environment may be added later for occasional local
+use, but it must not compromise the server-first design.
+
+### Function over novelty
+
+Customisation should have a technical or usability purpose.
+
+Standard Linux conventions should be preserved where they improve
+compatibility, reliability or maintainability.
+
+### Hardware-aware
+
+EREBUS is designed specifically for ATROPOS rather than as a generic distro.
+
+Hardware-specific decisions should be documented and tested against the
+MacBookAir6,2 target.
+
+### Build portability
+
+CLOTHO has a newer CPU than ATROPOS.
+
+The project therefore avoids accidental build-host CPU optimisation leaking
+into target binaries.
+
+This became a formal project concern after GMP was found to contain
+host-specific compiler tuning which caused GCC to execute an illegal
+instruction on ATROPOS.
+
+That failure and its repair are preserved in the Chapter 8 documentation.
+
+### Documentation is part of the build
+
+The repository preserves:
+
+- build stages
+- package versions
+- kernel configuration
+- boot configuration
+- troubleshooting history
+- failed builds
+- recovery procedures
+- architectural decisions
+- networking configuration
+- security configuration
+- hardware-specific decisions
+- maintenance procedures
+
+Failures and their solutions are considered valuable project documentation.
+
+## Build base
+
+Pinned base:
+
+- Linux From Scratch 13.1-systemd
+- x86-64
 - systemd
-- ext4 root filesystem
-- successful native boot on MacBookAir6,2
-- ASIX AX88179 wired Ethernet support
-- OpenSSH with key-based administration
-- documented recovery snapshots
+- Linux 7.1.8
+- GRUB 2.14
+- build parallelism: `MAKEFLAGS=-j4`
 
-Broadcom BCM4360 Wi-Fi and further server functionality belong to the BLFS / post-LFS phase.
+The LFS base remains pinned for a given EREBUS release rather than silently
+following the development book.
 
-## Build workflow
+BLFS packages will be selected according to actual server requirements rather
+than installed indiscriminately.
 
-At a high level:
+## Remote administration
 
-1. Prepare and validate the build host.
-2. Prepare the target filesystem and sources.
-3. Build the cross-toolchain and temporary tools.
-4. Enter chroot and build the final LFS base system.
-5. Configure userspace, systemd, the kernel and bootloader.
-6. Deploy to the target MacBook Air.
-7. Validate native boot, networking and remote administration.
-8. Add selected BLFS components and home-lab services.
+ATROPOS is administered remotely from CLOTHO using OpenSSH.
 
-The detailed chronological record lives under [`docs/`](docs/).
+Current effective SSH authentication policy:
+
+```text
+PermitRootLogin no
+PubkeyAuthentication yes
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+```
+
+A normal user account is used for remote login and root privileges are
+obtained locally after authentication.
+
+See:
+
+```text
+docs/remote-administration.md
+```
+
+## Current project phase
+
+Core LFS construction is complete.
+
+The next phase is BLFS/post-LFS server enablement.
+
+Planned work includes:
+
+1. define the BLFS build and package-tracking policy
+2. establish a post-deployment recovery strategy
+3. configure time synchronisation and trust infrastructure
+4. configure server firewall policy
+5. add hardware health and thermal monitoring
+6. configure SSD maintenance and TRIM
+7. review laptop-specific power and lid behaviour
+8. establish logging and monitoring policy
+9. stabilise home-lab addressing and DNS integration
+10. add BCM4360 Wi-Fi as optional secondary networking
+11. define backup and restore procedures
+12. install only the services required by the TENEBRAE home lab
+13. add a lightweight optional local graphical environment
+14. perform extended soak and recovery testing
 
 ## Repository structure
 
 ```text
-EREBUS/
-├── configs/
-│   └── kernel/
-├── docs/
-│   ├── chapter-06-temporary-tools.md
-│   ├── chapter-07-chroot.md
-│   ├── chapter-08-basic-system.md
-│   ├── chapter-09-system-configuration.md
-│   ├── chapter-10-bootable-system.md
-│   ├── chapter-11-finalization.md
-│   ├── remote-administration.md
-│   └── session-workflow.md
-├── host-checks/
-├── package-lists/
-├── scripts/
-│   ├── start-erebus.sh
-│   └── stop-erebus.sh
-└── README.md
+docs/
+    Build records, architecture, troubleshooting and operational documentation.
+
+configs/
+    Preserved configuration including the Linux kernel configuration.
+
+host-checks/
+    Build-host validation records.
+
+package-lists/
+    Source/package information associated with the pinned LFS base.
+
+scripts/
+    Build-session and maintenance tooling.
+
+README.md
+    Project overview.
 ```
 
-## Build-session helpers
+Some filenames currently retain the former `erebOS` name while the EREBUS
+rename is being migrated in controlled stages.
 
-The helper scripts manage the hosted LFS session, including the `/bin/sh` switch required for LFS work, the `/mnt/lfs` mount, virtual filesystems and restoration of the Ubuntu host when the session ends.
+## Session workflow
 
-Start a session:
+The existing build-session tooling prepares CLOTHO for LFS/BLFS work by:
 
-```bash
-./scripts/start-erebus.sh
-```
+- temporarily switching `/bin/sh` from Dash to Bash
+- temporarily disabling the Ubuntu `/etc/bash.bashrc`
+- mounting the build filesystem at `/mnt/lfs`
+- mounting required virtual filesystems
+- providing the chroot command
 
-End a session:
+When the session ends, the stop script restores CLOTHO to its normal Ubuntu
+state.
 
-```bash
-./scripts/stop-erebus.sh
-```
+The session scripts have been renamed to `start-erebus.sh` and
+`stop-erebus.sh`. The local project directory and build image filename will
+be migrated separately after their dependencies have been audited and tested.
 
-During the naming migration, the start script can also recognise the legacy `~/Projects/erebOS` project directory and `erebOS-lfs.img` image so the rename can be completed without breaking the build workflow.
+## Git and GitHub
 
-## Documentation philosophy
+Git contains:
 
-The repository preserves the process rather than presenting only a polished end state. Build failures, wrong assumptions, troubleshooting, recovery procedures and abandoned experiments are documented where they are useful.
+- documentation
+- scripts
+- package manifests
+- configuration
+- patches
+- kernel configuration
+- build metadata
+- troubleshooting records
+- diagrams and project assets
 
-The goal is for the documentation to become both a learning record and a maintenance manual for the finished system.
+Git does not contain:
+
+- filesystem images
+- recovery images
+- downloaded source archives
+- large generated binaries
+- transient build directories
+
+Milestone commits are preferred over committing every individual package.
 
 ## References
 
-EREBUS is built primarily from:
+EREBUS uses the official Linux From Scratch and Beyond Linux From Scratch
+books as its primary technical references.
 
-- Linux From Scratch 13.1-systemd
-- Beyond Linux From Scratch
-
-The repository records the EREBUS implementation and project-specific decisions; it does not replace the upstream LFS/BLFS documentation.
-
----
-
-**STATUS NIHILI** · Software · Systems · Hardware · Experiments
+The repository documents the EREBUS implementation and project-specific
+decisions rather than replacing the upstream LFS/BLFS documentation.

@@ -22,7 +22,7 @@ Final checkpoint:
 
 ## Network configuration
 
-erebOS uses systemd-networkd for initial network configuration and
+EREBUS uses systemd-networkd for initial network configuration and
 systemd-resolved for DNS resolution.
 
 The following services were verified as enabled:
@@ -53,16 +53,16 @@ Contents:
     UseDomains=true
 
 LFS normally demonstrates matching a specific network interface name.
-erebOS deliberately matches physical Ethernet interfaces by type instead.
+EREBUS deliberately matches physical Ethernet interfaces by type instead.
 
 Reason:
 
 The final USB Gigabit Ethernet adapter interface name cannot be known
-reliably while building inside the Nitro-hosted chroot. Matching Type=ether
+reliably while building inside the CLOTHO-hosted chroot. Matching Type=ether
 provides a predictable wired recovery path without hard-coding a guessed
 interface name.
 
-After the first boot on the MacBookAir6,2, this rule may be tightened to
+After deployment to ATROPOS (MacBookAir6,2), this rule may be tightened to
 match the chosen adapter by MAC address or device path if useful.
 
 ### DNS
@@ -70,7 +70,7 @@ match the chosen adapter by MAC address or device path if useful.
 No static /etc/resolv.conf was created.
 
 systemd-resolved is enabled and will create the appropriate resolver link
-when erebOS boots normally.
+when EREBUS boots normally.
 
 ### Hostname
 
@@ -87,7 +87,7 @@ stored in:
 /etc/hosts contains the standard IPv6 localhost and multicast entries.
 
 No static IPv4 address or invented home-lab DNS domain was added during
-the base LFS build. These will be configured when erebOS is integrated
+the base LFS build. These will be configured as EREBUS is integrated
 into the live home-lab network.
 
 ## Device and module handling
@@ -106,7 +106,7 @@ The hardware real-time clock is being treated as UTC.
 No local-time RTC configuration was introduced and /etc/adjtime was not
 created for a local-time hardware clock.
 
-This is the preferred configuration for erebOS as a Linux server.
+This is the preferred configuration for EREBUS as a Linux server.
 
 The system timezone is:
 
@@ -119,7 +119,7 @@ The system timezone is:
     KEYMAP=uk
     FONT=Lat2-Terminus16
 
-The UK keymap matches the target MacBook Air keyboard.
+The UK keymap matches the ATROPOS MacBook Air keyboard.
 
 Lat2-Terminus16 provides suitable Unicode coverage for the Linux virtual
 console and the C.UTF-8 console locale.
@@ -130,7 +130,7 @@ chroot environment.
 
 ## System locale
 
-The normal erebOS locale is:
+The normal EREBUS locale is:
 
     en_GB.UTF-8
 
@@ -207,7 +207,7 @@ Other optional systemd customisations were deliberately deferred:
 These policies will be revisited during BLFS and server hardening once the
 base system has booted successfully on the target hardware.
 
-## erebOS-specific decisions
+## EREBUS-specific decisions
 
 The principal Chapter 9 deviation from the generic LFS examples is the
 wired DHCP match rule:
@@ -216,11 +216,11 @@ wired DHCP match rule:
 
 rather than a hard-coded interface name.
 
-This is intentional because erebOS is being built on an Acer Nitro but
-will run on a MacBookAir6,2 using USB Gigabit Ethernet for initial network
-access and recovery.
+This is intentional because EREBUS was built on CLOTHO (Acer Nitro 5)
+and runs on ATROPOS (MacBookAir6,2), using USB Gigabit Ethernet for initial
+network access and recovery.
 
-No MacBook-specific udev customisation was added before testing on the
+No ATROPOS-specific udev customisation was added before testing on the
 actual target hardware.
 
 ## Next step

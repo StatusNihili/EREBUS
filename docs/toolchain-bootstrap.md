@@ -1,9 +1,9 @@
-# erebOS Bootstrap Toolchain
+# EREBUS Bootstrap Toolchain
 
 ## Base
 
 - Linux From Scratch: 13.1-systemd
-- Build host: Acer Nitro 5 AN515-52
+- Build host: CLOTHO — Acer Nitro 5 AN515-52
 - Target architecture: x86_64
 - Target triplet: x86_64-lfs-linux-gnu
 - Build filesystem: /mnt/lfs
@@ -77,9 +77,9 @@ Cross-toolchain sanity checks confirmed:
 
 ## Status
 
-The initial erebOS cross-toolchain is functional.
+The initial EREBUS cross-toolchain is functional.
 
-Binutils, GCC, Linux API headers, and Glibc are correctly integrated and targeting the erebOS filesystem.
+Binutils, GCC, Linux API headers, and Glibc are correctly integrated and targeting the EREBUS filesystem.
 
 ## Libstdc++ — Pass 1
 

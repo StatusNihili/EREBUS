@@ -12,6 +12,6 @@ build/
 .DS_Store
 *~
 
-# Local erebOS recovery snapshots
+# Local EREBUS recovery snapshots
 backups/*.img
 backups/*.sha256

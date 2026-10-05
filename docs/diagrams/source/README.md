@@ -1,3 +1,3 @@
 # Diagram Sources
 
-Editable source files for erebOS architecture and system-design diagrams.
+Editable source files for EREBUS architecture and system-design diagrams.

@@ -17,7 +17,7 @@ Post-deployment validation has confirmed:
 - working wired networking
 - working OpenSSH remote administration
 - successful reboot with networking and `sshd` returning automatically
-- key-only SSH access from the Acer Nitro administration workstation
+- key-only SSH access from CLOTHO, the Acer Nitro administration workstation
 
 The project has therefore moved beyond the LFS construction phase and into
 post-LFS/BLFS hardware enablement and server configuration.
@@ -48,7 +48,7 @@ The installed operating system identifies itself as erebOS.
     DISTRIB_RELEASE="LFS-13.1-systemd"
     DISTRIB_DESCRIPTION="erebOS (Linux From Scratch 13.1-systemd)"
 
-No artificial erebOS release number or codename has been assigned yet.
+No artificial EREBUS release number or codename has been assigned yet.
 
 ## Root account
 
@@ -125,7 +125,7 @@ recovery was positively identified on the build host:
     USB ID: 0b95:1790
     Device: ASIX AX88179 Gigabit Ethernet
 
-The erebOS Linux 7.1.8 module tree contains a matching alias:
+The EREBUS Linux 7.1.8 module tree contains a matching alias:
 
     alias usb:v0B95p1790d*dc*dsc*dp*icFFiscFFip00in* ax88179_178a
 
@@ -136,16 +136,16 @@ The kernel configuration contains:
 The ax88179_178a driver declares no external firmware requirement.
 
 This confirms that the planned wired first-boot networking path is present
-in the erebOS kernel.
+in the EREBUS kernel.
 
 ## First-boot networking path
 
 The planned wired first-boot networking path has now been validated on the
-physical MacBook Air.
+physical ATROPOS system.
 
 Functional path:
 
-    MacBook Air USB
+    ATROPOS USB
         -> ASIX AX88179
         -> ax88179_178a module
         -> systemd-networkd
@@ -153,11 +153,11 @@ Functional path:
         -> wired home-lab network
         -> OpenSSH
 
-During initial target validation the MacBook Air received:
+During initial target validation ATROPOS received:
 
     192.168.1.231
 
-The Acer Nitro successfully reached the target over the LAN and established
+CLOTHO successfully reached ATROPOS over the LAN and established
 authenticated SSH sessions.
 
 Wired Ethernet remains the preferred administration and recovery path.

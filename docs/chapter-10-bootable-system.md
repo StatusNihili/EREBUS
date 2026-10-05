@@ -14,10 +14,10 @@ Completed:
 - kernel and modules built successfully
 - kernel artifacts installed under `/boot`
 - kernel configuration preserved in Git
-- MacBook Air internal SSD partitioned using GPT
+- ATROPOS internal SSD partitioned using GPT
 - EFI System Partition created as `/dev/sda1`
-- erebOS root partition created as `/dev/sda2`
-- erebOS filesystem deployed to the physical target
+- EREBUS root partition created as `/dev/sda2`
+- EREBUS filesystem deployed to ATROPOS
 - GRUB 2.14 installed for x86_64 EFI
 - removable/fallback EFI boot path created
 - final GRUB configuration created using the real root PARTUUID
@@ -25,14 +25,14 @@ Completed:
 
 ## Target storage layout
 
-The 2014 MacBook Air internal SSD is dedicated entirely to erebOS.
+The ATROPOS internal SSD (2014 MacBook Air) is dedicated entirely to EREBUS.
 
 Planned layout:
 
     GPT
     ├── Partition 1   512 MiB   FAT32   EFI System Partition
     │                            filesystem label: EREBOS_EFI
-    └── Partition 2   remainder  ext4    erebOS root filesystem
+    └── Partition 2   remainder  ext4    EREBUS root filesystem
                                  filesystem label: erebOS-root
 
 No dedicated swap partition is planned.
@@ -53,7 +53,7 @@ The EFI System Partition will be mounted at:
 
     /boot/efi
 
-The ESP mount point has been created in the erebOS root filesystem.
+The ESP mount point has been created in the EREBUS root filesystem.
 
 ## Kernel
 
@@ -67,7 +67,7 @@ Kernel release:
 
 Build host:
 
-    Acer Nitro 5 AN515-52
+    CLOTHO — Acer Nitro 5 AN515-52
 
 Build parallelism:
 
@@ -90,7 +90,7 @@ Build timing:
 ## Kernel configuration strategy
 
 The kernel was configured specifically for the target MacBookAir6,2 rather
-than by detecting the Acer Nitro build host.
+than by detecting the CLOTHO build host.
 
 The process was:
 
@@ -100,14 +100,14 @@ The process was:
 followed by deliberate LFS and MacBookAir6,2 configuration changes.
 
 make localmodconfig was not used because it would configure the kernel for
-the Nitro rather than the target MacBook Air.
+CLOTHO rather than the target ATROPOS system.
 
-The first erebOS kernel prioritises reliable booting and diagnostics over
+The first EREBUS kernel prioritises reliable booting and diagnostics over
 aggressive minimisation.
 
 ## No-initramfs design
 
-The initial erebOS boot is designed without an initramfs.
+The initial EREBUS boot is designed without an initramfs.
 
 For this reason, all components required to reach and mount the root
 filesystem are built directly into the kernel.
@@ -243,7 +243,7 @@ SHA256:
 
     1a7fc61a477f45ca394aba855148c671ca70289f95566fd261a8a3fbf152cf4e
 
-This checksum matches /boot/config-7.1.8 from the built erebOS filesystem.
+This checksum matches /boot/config-7.1.8 from the built EREBUS filesystem.
 
 The kernel source tree was retained at:
 
@@ -271,7 +271,7 @@ Target root partition:
 
     /dev/sda2
 
-GRUB was installed on the physical MacBook Air using the removable EFI
+GRUB was installed on ATROPOS using the removable EFI
 fallback path.
 
 The installation completed successfully and created:
@@ -283,11 +283,11 @@ the standard UEFI removable-media fallback path.
 
 ## GRUB deployment
 
-During the Nitro-hosted build, final GRUB installation was deliberately
-deferred because the real MacBook Air EFI System Partition did not yet
+During the CLOTHO-hosted build, final GRUB installation was deliberately
+deferred because the real ATROPOS EFI System Partition did not yet
 exist.
 
-After deployment to the physical MacBook Air, the real ESP was mounted at:
+After deployment to ATROPOS, the real ESP was mounted at:
 
     /boot/efi
 
@@ -295,7 +295,7 @@ GRUB installation was then performed against the actual target filesystem
 rather than the temporary build image.
 
 This preserved the rule that no bootloader installation would be attempted
-against the Acer Nitro or an artificial ESP during the hosted build.
+against CLOTHO or an artificial ESP during the hosted build.
 
 ## Target deployment sequence
 
@@ -305,7 +305,7 @@ MacBookAir6,2.
 Final target layout:
 
     /dev/sda1    EFI System Partition
-    /dev/sda2    erebOS root filesystem
+    /dev/sda2    EREBUS root filesystem
 
 Filesystem labels:
 
@@ -318,18 +318,18 @@ Deployment included:
 2. creating the GPT partition table
 3. creating the EFI System Partition
 4. creating the ext4 root partition
-5. deploying the erebOS root filesystem
+5. deploying the EREBUS root filesystem
 6. mounting the ESP at `/boot/efi`
 7. recording the actual root partition identifiers
 8. installing GRUB for x86_64 EFI using the removable/fallback path
 9. creating the final GRUB configuration
-10. rebooting into erebOS natively
+10. rebooting into EREBUS natively
 
 The first native boot reached the `erebos login` prompt successfully.
 
 ## GRUB root identification
 
-The deployed erebOS root filesystem is:
+The deployed EREBUS root filesystem is:
 
     /dev/sda2
 
@@ -352,7 +352,7 @@ This avoids dependence on Linux block-device enumeration order.
 
 Chapter 10 is complete.
 
-The MacBookAir6,2 now boots erebOS natively from its internal SSD using the
+ATROPOS (MacBookAir6,2) now boots EREBUS natively from its internal SSD using the
 installed Linux 7.1.8 kernel and GRUB 2.14 EFI bootloader.
 
 The first native boot successfully reached the local `erebos login` prompt.
@@ -388,7 +388,7 @@ Filesystem summary:
     erebOS-lfs: 357475/4194304 files (0.1% non-contiguous),
     2816474/16777216 blocks
 
-This snapshot represents the known-good erebOS system after:
+This snapshot represents the known-good EREBUS system after:
 
 - completion of LFS Chapter 9
 - creation of the target /etc/fstab
@@ -396,5 +396,5 @@ This snapshot represents the known-good erebOS system after:
 - installation of kernel modules and boot artifacts
 - verification of GRUB 2.14 x86_64 EFI support
 
-Final GRUB installation remains intentionally deferred until the real
-MacBook Air EFI System Partition exists.
+Final GRUB installation was subsequently completed on ATROPOS after the
+real EFI System Partition was created and mounted at `/boot/efi`.
