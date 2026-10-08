@@ -32,21 +32,27 @@ with:
 
     13.1-systemd
 
-The installed operating system identifies itself as erebOS.
+The installed operating system now identifies itself as EREBUS, and the
+production machine hostname is `atropos`.
 
 ### /etc/os-release
 
-    NAME="erebOS"
-    ID=erebos
-    PRETTY_NAME="erebOS"
-    HOME_URL="https://github.com/ChaosPup-1980/erebOS"
+    NAME="EREBUS"
+    ID=erebus
+    PRETTY_NAME="EREBUS"
+    HOME_URL="https://github.com/StatusNihili/EREBUS"
     BUILD_ID="lfs-13.1-systemd"
 
 ### /etc/lsb-release
 
-    DISTRIB_ID="erebOS"
+    DISTRIB_ID="EREBUS"
     DISTRIB_RELEASE="LFS-13.1-systemd"
-    DISTRIB_DESCRIPTION="erebOS (Linux From Scratch 13.1-systemd)"
+    DISTRIB_DESCRIPTION="EREBUS (Linux From Scratch 13.1-systemd)"
+
+The live identity migration was completed and reboot-tested on 2026-10-08.
+Full details are recorded in:
+
+    docs/identity-migration.md
 
 No artificial EREBUS release number or codename has been assigned yet.
 
